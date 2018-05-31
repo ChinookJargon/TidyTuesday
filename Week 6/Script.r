@@ -1,9 +1,10 @@
-# Tidy Tuesday week 6
+### Tidy Tuesday week 6
 
+##Gameplan
 # 1 Load data
 # 2 Clean data
 # 3 merge data
-# plot heatmap
+# 4 plot map
 
 library(tidyverse)
 library(readxl)
