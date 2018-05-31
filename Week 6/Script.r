@@ -29,7 +29,6 @@ sb1 <- sb1 %>%
 #Standardizing names for columns for eventual merge
 names(sb1) <- c("biz", "long", "lat")
 
-
 ### Tim Hortons wrangling 
 #filter dataset for only USA locations
 th1 <- th %>%
