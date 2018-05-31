@@ -5,7 +5,6 @@
 # 3 merge data
 # plot heatmap
 
-setwd("/media/jr/Kingston/R/Datasets/Tidy Tuesday/week 6")
 library(tidyverse)
 library(readxl)
 
