@@ -1,13 +1,14 @@
-### Tidy Tuesday week 6
+# Tidy Tuesday week 6
 
-##Gameplan
 # 1 Load data
 # 2 Clean data
 # 3 merge data
-# 4 plot map
+# plot heatmap
 
+setwd("/media/jr/Kingston/R/Datasets/Tidy Tuesday/week 6")
 library(tidyverse)
 library(readxl)
+library(ggmap)
 
 #Identify the number of excel sheets
 excel_sheets("week6_coffee_chains.xlsx")
@@ -29,6 +30,8 @@ sb1 <- sb1 %>%
 #Standardizing names for columns for eventual merge
 names(sb1) <- c("biz", "long", "lat")
 
+sb1[["biz"]] <- "Starbucks"
+
 ### Tim Hortons wrangling 
 #filter dataset for only USA locations
 th1 <- th %>%
@@ -38,16 +41,20 @@ th1 <- th %>%
 th1 <- th1 %>%
    mutate(fullAddress = paste(address, ",", city, ",", state, postal_code))
 
+#remove empty spaces in fullAddress
+th1[["fullAddress"]] <- str_replace_all(th1[["fullAddress"]],  " ,", ",")
+
+
 #geocoding addresses
 th2 <- mutate_geocode(th1, fullAddress, source = "google")
 
 #Selecting relevent columns without errors
 th3 <- th2 %>%
-   select(lon, lat)
-filter(!is.na(lon)) 
+   select(lon, lat) %>%
+   filter(!is.na(lon))
 
 #Creating a column and assigning a value to it
-th3$biz_name <- "Tim Hortons"
+th3$biz <- "Tim Hortons"
 
 #Rearranging the columns
 th3 <- th3[, c(3,1,2)]
@@ -76,6 +83,9 @@ final.dataset <- rbind(dd1,th3, sb1)
 final.dataset2 <- final.dataset %>%
    filter(lat < 50 & long > -130)
 
+final.dataset2[["biz"]] <- as.factor(final.dataset2[["biz"]])
+   
+
 ### Final plot
 map_data("usa") %>%
    ggplot(aes(long, lat)) +
@@ -92,4 +102,3 @@ map_data("usa") %>%
    theme(axis.title = element_blank()) +
    theme(axis.text = element_blank()) +
    theme(axis.ticks = element_blank())
-
